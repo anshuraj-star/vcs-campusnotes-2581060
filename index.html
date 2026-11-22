@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CampusNotes — Student Notes</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; }
+    body { max-width: 760px; margin: 3rem auto; padding: 0 1rem; color: #172033; }
+    header { margin-bottom: 1.5rem; }
+    h1 { margin-bottom: .25rem; }
+    .muted { color: #5d6678; }
+    label { display: block; font-weight: 600; margin-bottom: .5rem; }
+    input { box-sizing: border-box; width: 100%; padding: .8rem; border: 1px solid #9aa4b2; border-radius: .5rem; font: inherit; }
+    ul { padding-left: 1.25rem; }
+    li { padding: .45rem 0; }
+    #empty-state { color: #7a263a; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CampusNotes</h1>
+    <p class="muted">Student Note-Sharing Portal · Anshu Raj · URN 2581060</p>
+  </header>
+
+  <main>
+    <label for="search-input">Search notes by unit or keyword</label>
+    <input id="search-input" type="search" placeholder="Try “branching” or “remote”" autocomplete="off">
+    <p id="result-count" class="muted" aria-live="polite"></p>
+    <ul id="notes-list"></ul>
+    <p id="empty-state" hidden>No matching notes. Try another keyword.</p>
+  </main>
+
+  <script src="search.js"></script>
+  <script>
+    const notes = [
+      'Unit 1: Git Basics',
+      'Unit 2: Branching',
+      'Unit 3: Merging',
+      'Unit 4: Remote Repositories'
+    ];
+
+    const searchInput = document.getElementById('search-input');
+    const notesList = document.getElementById('notes-list');
+    const resultCount = document.getElementById('result-count');
+    const emptyState = document.getElementById('empty-state');
+
+    function renderNotes(query = '') {
+      const matches = searchNotes(notes, query);
+      notesList.replaceChildren();
+
+      for (const note of matches) {
+        const item = document.createElement('li');
+        item.textContent = note;
+        notesList.appendChild(item);
+      }
+
+      resultCount.textContent = matches.length + ' of ' + notes.length + ' notes';
+      emptyState.hidden = matches.length !== 0;
+    }
+
+    searchInput.addEventListener('input', event => renderNotes(event.target.value));
+    renderNotes();
+  </script>
+</body>
+</html>
